@@ -1,4 +1,4 @@
-package com.akash.appscheduler.Di
+package com.akash.appscheduler.Di.Modules
 
 import android.content.Context
 import com.akash.appscheduler.Dao.HistoryDao

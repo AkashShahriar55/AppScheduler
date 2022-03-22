@@ -10,7 +10,7 @@ import com.akash.appscheduler.Models.PackageInfo
 import com.akash.appscheduler.databinding.PackageInfoItemBinding
 
 
-class SchedulerAdapter: RecyclerView.Adapter<SchedulerAdapter.SchedulerViewHolder>() {
+class SchedulerAdapter(val onScheduleClicked:()->Unit): RecyclerView.Adapter<SchedulerAdapter.SchedulerViewHolder>() {
     private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<PackageInfo>(){
         override fun areItemsTheSame(oldItem: PackageInfo, newItem: PackageInfo): Boolean {
             return oldItem.packageName == newItem.packageName
@@ -23,13 +23,14 @@ class SchedulerAdapter: RecyclerView.Adapter<SchedulerAdapter.SchedulerViewHolde
     }
     private val mDiffer: AsyncListDiffer<PackageInfo> = AsyncListDiffer<PackageInfo>(this, DIFF_CALLBACK)
 
-    inner class SchedulerViewHolder(private val binding:PackageInfoItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class SchedulerViewHolder(val binding:PackageInfoItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         public fun bind(packageInfo: PackageInfo){
             binding.tvName.text = packageInfo.appName
             binding.tvVersion.text = "Version : " + packageInfo.versionName
             binding.tvVersionCode.text = "Version code : " + packageInfo.versionCode
             binding.roundedImageView.setImageDrawable(packageInfo.icon)
+
         }
     }
 
@@ -43,6 +44,10 @@ class SchedulerAdapter: RecyclerView.Adapter<SchedulerAdapter.SchedulerViewHolde
         if (position != RecyclerView.NO_POSITION) {
             val item = mDiffer.currentList[position]
             holder.bind(item)
+
+            holder.binding.tvSchedule.setOnClickListener {
+                onScheduleClicked()
+            }
         }
     }
 

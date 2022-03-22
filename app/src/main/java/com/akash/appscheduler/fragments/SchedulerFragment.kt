@@ -1,23 +1,22 @@
 package com.akash.appscheduler.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
+import android.widget.DatePicker
+import android.widget.TimePicker
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.akash.appscheduler.Adapters.SchedulerAdapter
 import com.akash.appscheduler.R
 import com.akash.appscheduler.Viewmodels.MainViewModel
 import com.akash.appscheduler.databinding.FragmentSchedulerBinding
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 
 @AndroidEntryPoint
@@ -53,7 +52,25 @@ class SchedulerFragment : Fragment() {
 
     private fun setUpRecyclerView() {
         val layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
-        adapter = SchedulerAdapter()
+        adapter = SchedulerAdapter({
+            val dialogView = View.inflate(activity, R.layout.date_time_picker, null)
+            val alertDialog: AlertDialog = AlertDialog.Builder(activity).create()
+
+            dialogView.findViewById<View>(R.id.date_time_set).setOnClickListener {
+                val datePicker = dialogView.findViewById<View>(R.id.date_picker) as DatePicker
+                val timePicker = dialogView.findViewById<View>(R.id.time_picker) as TimePicker
+                val calendar: Calendar = GregorianCalendar(
+                    datePicker.year,
+                    datePicker.month,
+                    datePicker.dayOfMonth,
+                    timePicker.currentHour,
+                    timePicker.currentMinute
+                )
+                alertDialog.dismiss()
+            }
+            alertDialog.setView(dialogView)
+            alertDialog.show()
+        })
         binding.packageHolderRv.layoutManager = layoutManager
         binding.packageHolderRv.adapter = adapter
 

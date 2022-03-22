@@ -9,11 +9,13 @@ import androidx.room.TypeConverters
 import com.akash.appscheduler.Converters.Converters
 import com.akash.appscheduler.Dao.HistoryDao
 import com.akash.appscheduler.Models.History
+import com.akash.appscheduler.Models.HistoryFts
 
 
 @Database(
     entities = [
-        History::class
+        History::class,
+        HistoryFts::class
     ],
     version = 1,
     exportSchema = false
