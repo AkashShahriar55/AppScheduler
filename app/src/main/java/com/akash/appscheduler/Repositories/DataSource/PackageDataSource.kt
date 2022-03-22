@@ -6,5 +6,6 @@ import com.akash.appscheduler.Models.PackageInfo
 import kotlinx.coroutines.flow.Flow
 
 interface PackageDataSource {
-    suspend fun fetchPackageInfo(context: Context):List<PackageInfo>
+    suspend fun fetchPackageInfo(context: Context)
+    fun getPackageInfo():LiveData<List<PackageInfo>>
 }

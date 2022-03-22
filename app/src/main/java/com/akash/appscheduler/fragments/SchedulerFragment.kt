@@ -7,17 +7,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.akash.appscheduler.Adapters.SchedulerAdapter
 import com.akash.appscheduler.R
 import com.akash.appscheduler.Viewmodels.MainViewModel
+import com.akash.appscheduler.databinding.FragmentSchedulerBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
 class SchedulerFragment : Fragment() {
 
-    val mainViewModel: MainViewModel by viewModels()
+    private lateinit var adapter: SchedulerAdapter
+    val mainViewModel: MainViewModel by activityViewModels()
+    lateinit var binding: FragmentSchedulerBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,15 +39,24 @@ class SchedulerFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_scheduler, container, false)
+        binding = FragmentSchedulerBinding.inflate(inflater,container,false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        mainViewModel.fetchPackageData().observe(viewLifecycleOwner, Observer {
-            Log.d("test", "onCreate: " + it)
+        setUpRecyclerView()
+        mainViewModel.getPackageInfo().observe(viewLifecycleOwner, Observer {
+            adapter.submitList(it)
         })
+    }
+
+    private fun setUpRecyclerView() {
+        val layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
+        adapter = SchedulerAdapter()
+        binding.packageHolderRv.layoutManager = layoutManager
+        binding.packageHolderRv.adapter = adapter
+
     }
 
     companion object {

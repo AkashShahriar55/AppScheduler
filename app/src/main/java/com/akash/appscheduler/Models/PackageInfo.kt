@@ -6,7 +6,7 @@ data class PackageInfo(
     val id:Int,
     val appName:String,
     val packageName:String,
-    val versionName:String,
+    val versionName:String?,
     val versionCode:Int = 0,
-    val icon:Drawable
+    val icon:Drawable?
 )

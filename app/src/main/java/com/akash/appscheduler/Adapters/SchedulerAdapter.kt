@@ -35,7 +35,7 @@ class SchedulerAdapter: RecyclerView.Adapter<SchedulerAdapter.SchedulerViewHolde
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SchedulerViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = PackageInfoItemBinding.inflate(inflater)
+        val binding = PackageInfoItemBinding.inflate(inflater,parent,false)
         return SchedulerViewHolder(binding)
     }
 

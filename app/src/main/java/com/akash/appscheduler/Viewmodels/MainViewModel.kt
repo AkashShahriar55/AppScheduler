@@ -1,21 +1,36 @@
 package com.akash.appscheduler.Viewmodels
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.*
 import com.akash.appscheduler.Models.PackageInfo
 import com.akash.appscheduler.Repositories.PackageRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.concurrent.Flow
+import javax.inject.Inject
 
-class MainViewModel(
-    val packageRepository: PackageRepository, application: Application
+@HiltViewModel
+class MainViewModel  @Inject constructor(
+    val  packageRepository: PackageRepository, application: Application
 ): AndroidViewModel(application) {
 
 
-    fun fetchPackageData():LiveData<List<PackageInfo>>{
-        return packageRepository.fetchPackageData(getApplication())
+    init {
+
+    }
+
+
+    fun fetchPackageData(){
+        viewModelScope.launch(Dispatchers.Default) {
+            packageRepository.fetchPackageData(getApplication())
+        }
+
+    }
+
+
+    fun getPackageInfo():LiveData<List<PackageInfo>>{
+        return packageRepository.getPackageInfo()
     }
 
 
